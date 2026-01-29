@@ -8,6 +8,14 @@
     <artifactId>rbac-meta-data-annotations</artifactId>
     <version>1.0.2</version>
     <properties/>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
     <dependencies>
         <!-- no dependencies -->
         <dependency>

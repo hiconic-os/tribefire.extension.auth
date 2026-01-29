@@ -10,5 +10,15 @@
 		<V.tribefire.cortex>[3.0,3.1)</V.tribefire.cortex>
 		<V.com.braintribe.gm>[2.0,2.1)</V.com.braintribe.gm>
 		<V.com.braintribe.common>[2.0,2.1)</V.com.braintribe.common>
+		<V.com.braintribe.wire>[2.0,2.1)</V.com.braintribe.wire>
+		<V.hiconic.platform.reflex>[1.0,1.1)</V.hiconic.platform.reflex>
 	</properties>
+	<licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
 </project>

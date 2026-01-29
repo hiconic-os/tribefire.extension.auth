@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>tribefire.extension.auth</groupId>
+        <artifactId>parent</artifactId>
+        <version>[1.0,1.1)</version>
+    </parent>
+    <artifactId>rbac-rx-module</artifactId>
+    <version>1.0.1</version>
+    <properties/>
+     <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <dependencies>
+        <dependency>
+            <groupId>hiconic.platform.reflex</groupId>
+            <artifactId>reflex-module-api</artifactId>
+            <version>${V.hiconic.platform.reflex}</version>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.auth</groupId>
+            <artifactId>rbac-processing</artifactId>
+            <version>${V.tribefire.extension.auth}</version>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.auth</groupId>
+            <artifactId>rbac-configured-api-model</artifactId>
+            <version>${V.tribefire.extension.auth}</version>
+            <?tag asset ?>
+        </dependency>
+    </dependencies>
+</project>
