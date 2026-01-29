@@ -1,0 +1,15 @@
+name: Periodic
+
+on:
+  schedule:
+    # TODO delete or set to something meaningful
+    - cron: "30 10 5 1 2"   # Every 5th january 10:30 UCT, but only when it falls on a Tuesday (last param = 2)
+
+jobs:
+  run:
+    uses: hiconic-os/hiconic.ci.workflows/.github/workflows/range.yaml@main
+    secrets: inherit
+    with:
+      range: "."
+      publish: false
+      job-name: 'periodic'      
