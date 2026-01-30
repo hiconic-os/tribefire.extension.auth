@@ -1,0 +1,23 @@
+roles:
+- &admin 
+  name: admin
+- &role1
+  name: role1
+- &role2 
+  name: role2
+users:
+- id: admin
+  name: admin
+  password: test
+  roles:
+  - *admin
+- id: user1
+  name: user1
+  password: test
+  roles:
+  - *role1
+- id: user1
+  name: user1
+  password: test
+  roles:
+  - *role2

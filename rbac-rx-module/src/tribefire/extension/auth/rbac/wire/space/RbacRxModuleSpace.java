@@ -1,5 +1,6 @@
 package tribefire.extension.auth.rbac.wire.space;
 
+import com.braintribe.model.service.api.AuthorizedRequest;
 import com.braintribe.model.service.api.ServiceRequest;
 import com.braintribe.wire.api.annotation.Import;
 import com.braintribe.wire.api.annotation.Managed;
@@ -21,7 +22,7 @@ public class RbacRxModuleSpace implements RxModuleContract {
 	@Override
 	public void configureModels(ModelConfigurations configurations) {
 		ModelConfiguration configuration = configurations.byName(_RbacConfiguredApiModel_.name);
-		configuration.bindInterceptor("service-auth").forType(ServiceRequest.T).bind(this::serviceAuthorizationPreProcessor);
+		configuration.bindInterceptor("service-auth").forType(AuthorizedRequest.T).bind(this::serviceAuthorizationPreProcessor);
 	}
 	
 	@Managed
