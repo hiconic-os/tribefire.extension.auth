@@ -20,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.braintribe.gm.model.reason.Maybe;
+import com.braintribe.gm.model.security.reason.Forbidden;
 import com.braintribe.model.processing.service.api.SessionIdAspect;
 import com.braintribe.model.securityservice.Logout;
 import com.braintribe.model.securityservice.OpenUserSessionResponse;
@@ -29,7 +30,10 @@ import com.braintribe.model.usersession.UserSession;
 import com.braintribe.utils.collection.impl.AttributeContexts;
 
 import hiconic.rx.test.common.AbstractRxTest;
-import tribefire.extension.auth.test.model.TestRequest;
+import tribefire.extension.auth.test.model.ProcessWithRole1;
+import tribefire.extension.auth.test.model.ProcessWithRole1AndWithoutRole2;
+import tribefire.extension.auth.test.model.ProcessWithRole2;
+import tribefire.extension.auth.test.model.ProcessWithoutRole;
 
 public class RbacTest extends AbstractRxTest {
 
@@ -38,11 +42,51 @@ public class RbacTest extends AbstractRxTest {
 	}
 
 	@Test
-	public void testExecution() {
-		TestRequest request = TestRequest.T.create();
-		Maybe<Neutral> reasoned = runAuthenticated("admin", () -> request.eval(evaluator).getReasoned());
+	public void testRoleFreeExecutionAllowed() {
+		ProcessWithoutRole request = ProcessWithoutRole.T.create();
+		Maybe<Neutral> reasoned = runAuthenticated("guest", () -> request.eval(evaluator).getReasoned());
 		
-		Assertions.assertThat(reasoned.isSatisfied());
+		Assertions.assertThat(reasoned.isSatisfied()).isTrue();
+	}
+	
+	@Test
+	public void testRoleFreeExecutionForbidden() {
+		ProcessWithRole1 request = ProcessWithRole1.T.create();
+		Maybe<Neutral> reasoned = runAuthenticated("guest", () -> request.eval(evaluator).getReasoned());
+		
+		Assertions.assertThat(reasoned.isUnsatisfiedBy(Forbidden.T)).isTrue();
+	}
+	
+	@Test
+	public void testRole1ExecutionAllowed() {
+		ProcessWithRole1 request = ProcessWithRole1.T.create();
+		Maybe<Neutral> reasoned = runAuthenticated("user1", () -> request.eval(evaluator).getReasoned());
+		
+		Assertions.assertThat(reasoned.isSatisfied()).isTrue();
+	}
+	
+	@Test
+	public void testRole1ExecutionForbidden() {
+		ProcessWithRole2 request = ProcessWithRole2.T.create();
+		Maybe<Neutral> reasoned = runAuthenticated("user1", () -> request.eval(evaluator).getReasoned());
+		
+		Assertions.assertThat(reasoned.isUnsatisfiedBy(Forbidden.T)).isTrue();
+	}
+	
+	@Test
+	public void testRole1ExecutionForbiddenByDenied() {
+		ProcessWithRole1AndWithoutRole2 request = ProcessWithRole1AndWithoutRole2.T.create();
+		Maybe<Neutral> reasoned = runAuthenticated("user3", () -> request.eval(evaluator).getReasoned());
+		
+		Assertions.assertThat(reasoned.isUnsatisfiedBy(Forbidden.T)).isTrue();
+	}
+	
+	@Test
+	public void testRole2ExecutionAllowed() {
+		ProcessWithRole1AndWithoutRole2 request = ProcessWithRole1AndWithoutRole2.T.create();
+		Maybe<Neutral> reasoned = runAuthenticated("user1", () -> request.eval(evaluator).getReasoned());
+		
+		Assertions.assertThat(reasoned.isSatisfied()).isTrue();
 	}
 	
 	private <T> T runAuthenticated(String user, Supplier<T> runner) {
