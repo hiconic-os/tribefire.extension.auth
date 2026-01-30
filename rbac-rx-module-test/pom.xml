@@ -36,6 +36,11 @@ limitations under the License.
         </dependency>
         <dependency>
             <groupId>tribefire.extension.auth</groupId>
+            <artifactId>rbac-processing</artifactId>
+            <version>${V.tribefire.extension.auth}</version>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.auth</groupId>
             <artifactId>rbac-test-model</artifactId>
             <version>${V.tribefire.extension.auth}</version>
         </dependency>
