@@ -1,7 +1,6 @@
 package tribefire.extension.auth.rbac.wire.space;
 
 import com.braintribe.model.service.api.AuthorizedRequest;
-import com.braintribe.model.service.api.ServiceRequest;
 import com.braintribe.wire.api.annotation.Import;
 import com.braintribe.wire.api.annotation.Managed;
 
@@ -10,6 +9,7 @@ import hiconic.rx.module.api.service.ModelConfigurations;
 import hiconic.rx.module.api.service.ServiceDomains;
 import hiconic.rx.module.api.wire.RxModuleContract;
 import hiconic.rx.module.api.wire.RxPlatformContract;
+import jsinterop.utils.Collections;
 import tribefire.extension.auth._RbacConfiguredApiModel_;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationPreProcessor;
 
@@ -31,6 +31,7 @@ public class RbacRxModuleSpace implements RxModuleContract {
 		ServiceDomains serviceDomains = platform.serviceDomains();
 		
 		bean.setMdResolverLookup(domainId -> serviceDomains.byId(domainId).contextCmdResolver());
+		bean.setBypassRoles(Collections.set("internal"));
 		return bean;
 	}
 

@@ -1,2 +1,2 @@
-tribefire.extension.auth.rbac.annotation.GrantedFor,tribefire.extension.auth.rbac.model.meta.GrantedFor,value,roles
-tribefire.extension.auth.rbac.annotation.DeniedFor,tribefire.extension.auth.rbac.model.meta.DeniedFor,value,roles
+tribefire.extension.auth.rbac.annotation.AllowRoles,tribefire.extension.auth.rbac.model.meta.AllowRoles,value,roles
+tribefire.extension.auth.rbac.annotation.DenyRoles,tribefire.extension.auth.rbac.model.meta.DenyRoles,value,roles

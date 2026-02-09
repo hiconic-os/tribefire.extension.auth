@@ -15,6 +15,7 @@ import com.braintribe.model.service.api.AuthorizedRequest;
 import com.braintribe.wire.api.annotation.Import;
 import com.braintribe.wire.api.annotation.Managed;
 
+import jsinterop.utils.Collections;
 import tribefire.extension.auth._RbacConfiguredApiModel_;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationPreProcessor;
 import tribefire.module.api.InitializerBindingBuilder;
@@ -97,6 +98,7 @@ public class RbacModuleSpace implements TribefireModuleContract {
 		ServiceAuthorizationPreProcessor bean = new ServiceAuthorizationPreProcessor();
 		ModelAccessoryFactory modelAccessoryFactory = tfPlatform.requestUserRelated().modelAccessoryFactory();
 		bean.setMdResolverLookup(domainId -> modelAccessoryFactory.getForServiceDomain(domainId).getCmdResolver());
+		bean.setBypassRoles(Collections.set("tf-internal"));
 		return bean;
 	}
 	

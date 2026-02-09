@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 @Documented
-public @interface DeniedFor {
+public @interface AllowRoles {
 	String globalId() default "";
-	/** A set of role names for which access/execution/etc is denied */
+	/** A set of role names for which access/execution/etc is granted */
 	String[] value();
 }
