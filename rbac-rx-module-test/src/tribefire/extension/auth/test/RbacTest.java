@@ -30,6 +30,8 @@ import com.braintribe.model.usersession.UserSession;
 import com.braintribe.utils.collection.impl.AttributeContexts;
 
 import hiconic.rx.test.common.AbstractRxTest;
+import tribefire.extension.auth.rbac.model.api.GetCurrentUserRequestAuthorizations;
+import tribefire.extension.auth.rbac.model.api.data.CurrentUserRequestAuthorizations;
 import tribefire.extension.auth.test.model.ProcessWithRole1;
 import tribefire.extension.auth.test.model.ProcessWithRole1AndWithoutRole2;
 import tribefire.extension.auth.test.model.ProcessWithRole2;
@@ -41,6 +43,16 @@ public class RbacTest extends AbstractRxTest {
 	public static void onBeforeClass() {
 	}
 
+	@Test
+	public void testReflection() {
+		GetCurrentUserRequestAuthorizations request = GetCurrentUserRequestAuthorizations.T.create();
+		CurrentUserRequestAuthorizations authorizations = runAuthenticated("guest", () -> request.eval(evaluator).getReasoned()).get();
+
+		for (var authorization : authorizations.getAuthorizations()) {
+			System.out.println(authorization);
+		}
+	}
+	
 	@Test
 	public void testRoleFreeExecutionAllowed() {
 		ProcessWithoutRole request = ProcessWithoutRole.T.create();

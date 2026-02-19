@@ -11,7 +11,10 @@ import hiconic.rx.module.api.wire.RxModuleContract;
 import hiconic.rx.module.api.wire.RxPlatformContract;
 import jsinterop.utils.Collections;
 import tribefire.extension.auth._RbacConfiguredApiModel_;
+import tribefire.extension.auth.rbac.model.api.ServiceAuthorizationReflectionRequest;
+import tribefire.extension.auth.rbac.processing.ServiceAuthorizationContext;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationPreProcessor;
+import tribefire.extension.auth.rbac.processing.ServiceAuthorizationReflectionProcessor;
 
 @Managed
 public class RbacRxModuleSpace implements RxModuleContract {
@@ -23,11 +26,26 @@ public class RbacRxModuleSpace implements RxModuleContract {
 	public void configureModels(ModelConfigurations configurations) {
 		ModelConfiguration configuration = configurations.byName(_RbacConfiguredApiModel_.name);
 		configuration.bindInterceptor("service-auth").forType(AuthorizedRequest.T).bind(this::serviceAuthorizationPreProcessor);
+		configuration.bindRequest(ServiceAuthorizationReflectionRequest.T, this::serviceAuthorizationReflectionProcessor);
+	}
+	
+	@Managed
+	private ServiceAuthorizationReflectionProcessor serviceAuthorizationReflectionProcessor() {
+		ServiceAuthorizationReflectionProcessor bean = new ServiceAuthorizationReflectionProcessor();
+		bean.setAuthorizationContext(serviceAuthorizationContext());
+		return bean;
 	}
 	
 	@Managed
 	private ServiceAuthorizationPreProcessor serviceAuthorizationPreProcessor() {
 		ServiceAuthorizationPreProcessor bean = new ServiceAuthorizationPreProcessor();
+		bean.setAuthorizationContext(serviceAuthorizationContext());
+		return bean;
+	}
+	
+	@Managed
+	private ServiceAuthorizationContext serviceAuthorizationContext() {
+		ServiceAuthorizationContext bean = new ServiceAuthorizationContext();
 		ServiceDomains serviceDomains = platform.serviceDomains();
 		
 		bean.setMdResolverLookup(domainId -> serviceDomains.byId(domainId).contextCmdResolver());

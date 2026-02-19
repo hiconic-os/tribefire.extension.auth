@@ -5,8 +5,8 @@
         <artifactId>parent</artifactId>
         <version>[1.0,1.1)</version>
     </parent>
-    <artifactId>rbac-configured-api-model</artifactId>
-    <version>1.0.2</version>
+    <artifactId>rbac-api-model</artifactId>
+    <version>1.0.1</version>
     <properties>
         <archetype>model</archetype>
     </properties>
@@ -21,19 +21,13 @@
             <groupId>com.braintribe.gm</groupId>
             <artifactId>service-api-model</artifactId>
             <version>${V.com.braintribe.gm}</version>
-            <?tag asset?>
-        </dependency>
-        <dependency>
-            <groupId>com.braintribe.gm</groupId>
-            <artifactId>security-reason-model</artifactId>
-            <version>${V.com.braintribe.gm}</version>
             <?tag asset ?>
         </dependency>
         <dependency>
             <groupId>tribefire.extension.auth</groupId>
-            <artifactId>rbac-api-model</artifactId>
+            <artifactId>rbac-meta-data-annotations</artifactId>
             <version>${V.tribefire.extension.auth}</version>
-            <?tag asset ?>
+            <?group functional?>
         </dependency>
     </dependencies>
 </project>
