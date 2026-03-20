@@ -35,7 +35,7 @@ public class ServiceAuthorizationReflectionProcessor extends AbstractDispatching
 
 	private RbacRequestAuthorizations getRbacRequestionAuthorizations(ServiceRequestContext context, GetRbacRequestAuthorizations request) {
 		String domainId = context.getDomainId();
-		ServiceAuthorizationResolver resolver = authorizationContext.getResolver(domainId);
+		ServiceDomainAuthorizationResolver resolver = authorizationContext.getDomainResolver(domainId);
 		
 		RbacRequestAuthorizations result = RbacRequestAuthorizations.T.create();
 		List<RbacRequestAuthorization> authorizations = result.getAuthorizations();
@@ -56,7 +56,7 @@ public class ServiceAuthorizationReflectionProcessor extends AbstractDispatching
 		UserSession userSession = context.getAttribute(UserSessionAspect.class);
 		Set<String> effectiveRoles = userSession.getEffectiveRoles();
 		String domainId = context.getDomainId();
-		ServiceAuthorizationResolver resolver = authorizationContext.getResolver(domainId);
+		ServiceDomainAuthorizationResolver resolver = authorizationContext.getDomainResolver(domainId);
 		
 		CurrentUserRequestAuthorizations result = CurrentUserRequestAuthorizations.T.create();
 		List<CurrentUserRequestAuthorization> authorizations = result.getAuthorizations();

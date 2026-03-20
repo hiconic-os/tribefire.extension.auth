@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>tribefire.extension.auth</groupId>
+        <artifactId>parent</artifactId>
+        <version>[1.0,1.1)</version>
+    </parent>
+    <artifactId>rbac-openapi-module</artifactId>
+    <version>1.0.1</version>
+    <properties/>
+    <dependencies>
+        <dependency>
+            <groupId>tribefire.cortex</groupId>
+            <artifactId>tribefire-web-module-api</artifactId>
+            <version>${V.tribefire.cortex}</version>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.web-api</groupId>
+            <artifactId>openapi-v3-module-api</artifactId>
+            <version>${V.tribefire.extension.web-api}</version>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.auth</groupId>
+            <artifactId>rbac-meta-data-model</artifactId>
+            <version>${V.tribefire.extension.auth}</version>
+            <?tag asset ?>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.auth</groupId>
+            <artifactId>rbac-processing</artifactId>
+            <version>${V.tribefire.extension.auth}</version>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.auth</groupId>
+            <artifactId>rbac-module</artifactId>
+            <version>${V.tribefire.extension.auth}</version>
+            <classifier>asset</classifier>
+            <type>man</type>
+            <?tag asset?>
+        </dependency>
+        <dependency>
+            <groupId>tribefire.extension.web-api</groupId>
+            <artifactId>web-api-server-module</artifactId>
+            <version>${V.tribefire.extension.web-api}</version>
+            <classifier>asset</classifier>
+            <type>man</type>
+            <?tag asset?>
+        </dependency>
+    </dependencies>
+</project>

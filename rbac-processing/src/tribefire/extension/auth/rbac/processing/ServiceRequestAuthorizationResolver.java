@@ -14,34 +14,13 @@ import tribefire.extension.auth.rbac.model.meta.AccessControl;
 import tribefire.extension.auth.rbac.model.meta.AllowRoles;
 import tribefire.extension.auth.rbac.model.meta.DenyRoles;
 
-public class ServiceAuthorizationResolver {
-	private String domainId;
-	private CmdResolver mdResolver;
+public class ServiceRequestAuthorizationResolver {
 	private Set<String> overrideRoles;
 	
-	public ServiceAuthorizationResolver(String domainId, CmdResolver mdResolver, Set<String> overrideRoles) {
-		super();
-		this.domainId = domainId;
-		this.mdResolver = mdResolver;
+	public ServiceRequestAuthorizationResolver(Set<String> overrideRoles) {
 		this.overrideRoles = overrideRoles;
 	}
 
-	public Set<EntityType<? extends AuthorizedRequest>> getRequestTypes() {
-		Set<EntityType<? extends AuthorizedRequest>> requestTypes = mdResolver.getModelOracle().findEntityTypeOracle(AuthorizedRequest.T) //
-				.getSubTypes().transitive().onlyInstantiable().asTypes();
-		return requestTypes;
-	}
-	
-	public Set<ServiceAuthorization> resolveAll() {
-		Set<ServiceAuthorization> authorizations = new HashSet<>();
-		
-		for (var requestType : getRequestTypes()) {
-			authorizations.add(resolve(requestType));
-		}
-		
-		return authorizations;
-	}
-	
 	private static class RoleAggregator {
 		private int mdAdded = 0;
 		private Set<String> roles = Collections.emptySet();
@@ -69,9 +48,7 @@ public class ServiceAuthorizationResolver {
 		}
 	}
 	
-	public ServiceAuthorization resolve(EntityType<? extends AuthorizedRequest> requestType) {
-		EntityMdResolver entityMdResolver = mdResolver.getMetaData().entityType(requestType);
-		
+	public ServiceAuthorization resolve(EntityMdResolver entityMdResolver) {
 		RoleAggregator allowRoles = new RoleAggregator();
 		RoleAggregator denyRoles = new RoleAggregator();
 		
@@ -85,7 +62,7 @@ public class ServiceAuthorizationResolver {
 			}
 		}
 		
-		return new ServiceAuthorization(domainId, requestType, overrideRoles, allowRoles.getRoles(), denyRoles.getRoles());
+		return new ServiceAuthorization(entityMdResolver.getGmEntityType(), overrideRoles, allowRoles.getRoles(), denyRoles.getRoles());
 	}
 	
 

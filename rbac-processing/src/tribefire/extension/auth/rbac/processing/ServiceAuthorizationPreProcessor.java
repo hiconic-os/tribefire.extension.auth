@@ -72,17 +72,13 @@ public class ServiceAuthorizationPreProcessor implements ReasonedServicePreProce
 			return getUserSession().getUser().getId();
 		}
 		
-		private ServiceAuthorization determineAllowAndDenyRoles() {
-			String domainId = context.getDomainId();
-			ServiceAuthorizationResolver resolver = authorizationContext.getResolver(domainId);
-			return resolver.resolve(request.entityType());
-		}
-		
 		public Maybe<? extends AuthorizedRequest> process() {
-			ServiceAuthorization authorization = determineAllowAndDenyRoles();
+			String domainId = context.getDomainId();
+			ServiceDomainAuthorizationResolver resolver = authorizationContext.getDomainResolver(domainId);
+			ServiceAuthorization authorization =  resolver.resolve(request.entityType());
 			
 			ServiceAccess determineAccess = authorization.determineAccess(getEffectiveRoles());
-			String requestInfo = "user: " + getUserId() + ", request: " + request.entityType().getTypeSignature() + ", domain: " + authorization.domainId();
+			String requestInfo = "user: " + getUserId() + ", request: " + request.entityType().getTypeSignature() + ", domain: " + domainId;
 			
 			switch (determineAccess) {
 			case ALLOWED_PUBLIC:

@@ -2,10 +2,9 @@ package tribefire.extension.auth.rbac.processing;
 
 import java.util.Set;
 
-import com.braintribe.model.generic.reflection.EntityType;
-import com.braintribe.model.service.api.AuthorizedRequest;
+import com.braintribe.model.meta.GmEntityType;
 
-public record ServiceAuthorization(String domainId, EntityType<? extends AuthorizedRequest> type, Set<String> overrideRoles, Set<String> allowRoles, Set<String> denyRoles) {
+public record ServiceAuthorization(GmEntityType type, Set<String> overrideRoles, Set<String> allowRoles, Set<String> denyRoles) {
 	public boolean isPriviledged() {
 		return !allowRoles.isEmpty() || !denyRoles.isEmpty();
 	}

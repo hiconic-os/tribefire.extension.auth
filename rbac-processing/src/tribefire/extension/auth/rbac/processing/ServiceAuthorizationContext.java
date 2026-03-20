@@ -30,7 +30,7 @@ public class ServiceAuthorizationContext {
 		return bypassRoles;
 	}
 	
-	public ServiceAuthorizationResolver getResolver(String domainId) {
-		return new ServiceAuthorizationResolver(domainId, mdResolverLookup.apply(domainId), bypassRoles);
+	public ServiceDomainAuthorizationResolver getDomainResolver(String domainId) {
+		return new ServiceDomainAuthorizationResolver(mdResolverLookup.apply(domainId), bypassRoles);
 	}
 }
