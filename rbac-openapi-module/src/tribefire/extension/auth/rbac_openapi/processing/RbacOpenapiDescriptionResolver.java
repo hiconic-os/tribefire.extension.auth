@@ -24,6 +24,8 @@ public class RbacOpenapiDescriptionResolver implements OpenapiDescriptionResolve
 	public void resolveEntityDescription(ModelMdResolver modelMdResolver, EntityMdResolver entityMdResolver, Consumer<String> consumer) {
 		ServiceAuthorization serviceAuthorization = authorizationResolver.resolve(entityMdResolver);
 		if (serviceAuthorization.isPriviledged()) {
+			consumer.accept("\n\n***");
+			consumer.accept("\n\n<b>`Authorization`</b>");
 			Set<String> allowRoles = serviceAuthorization.allowRoles();
 			Set<String> denyRoles = serviceAuthorization.denyRoles();
 			
@@ -33,13 +35,17 @@ public class RbacOpenapiDescriptionResolver implements OpenapiDescriptionResolve
 	}
 	
 	private void appendAccessInfo(String context, Set<String> roles, Consumer<String> consumer) {
-		consumer.accept("<p>\n");
-		consumer.accept("<b>");
+		if (roles.isEmpty())
+			return;
+		
+		consumer.accept("\n\n<br/>");
+		consumer.accept("<b>`");
 		consumer.accept(context);
-		consumer.accept("</b><br>\n");
-		consumer.accept("<ul>\n");
-		roles.stream().sorted().map(DOMTools::encode).map(r -> "<li>" + r + "</li>\n").forEach(consumer);
-		consumer.accept("</ul>\n");
-		consumer.accept("</p>\n");
+		consumer.accept(":`</b>");
+		
+		for (String role: roles) {
+			consumer.accept(" ");
+			consumer.accept(DOMTools.encode(role));
+		}
 	}
 }
