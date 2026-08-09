@@ -11,6 +11,7 @@ public interface RbacRequestAuthorization extends RequestAuthorization {
 	String overrideRoles = "overrideRoles";
 	String allowRoles = "allowRoles";
 	String denyRoles = "denyRoles";
+	String inducedRoles = "inducedRoles";
 	
 	Set<String> getOverrideRoles();
 	void setOverrideRoles(Set<String> overrideRoles);
@@ -20,5 +21,7 @@ public interface RbacRequestAuthorization extends RequestAuthorization {
 	
 	Set<String> getDenyRoles();
 	void setDenyRoles(Set<String> denyRoles);
-}
 
+	Set<String> getInducedRoles();
+	void setInducedRoles(Set<String> inducedRoles);
+}

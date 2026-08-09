@@ -67,4 +67,12 @@ public class ServiceDomainAuthorizationResolver extends ServiceRequestAuthorizat
 		EntityMdResolver entityMdResolver = mdResolver.getMetaData().entityType(requestType);
 		return resolve(entityMdResolver);
 	}
+
+	public Set<String> resolveInducedRoles(EntityType<? extends AuthorizedRequest> requestType) {
+		return resolveInducedRoles(mdResolver.getMetaData().entityType(requestType));
+	}
+
+	public Set<String> resolveInducedRoles(GmEntityType requestType) {
+		return resolveInducedRoles(mdResolver.getMetaData().entityType(requestType));
+	}
 }

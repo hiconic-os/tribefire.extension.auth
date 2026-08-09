@@ -10,7 +10,7 @@ import com.braintribe.model.processing.meta.cmd.CmdResolver;
 
 public class ServiceAuthorizationContext {
 	private Function<String, CmdResolver> mdResolverLookup;
-	private Set<String> bypassRoles = Collections.emptySet();
+	private Set<String> overrideRoles = Collections.emptySet();
 	
 	@Required
 	public void setMdResolverLookup(Function<String, CmdResolver> mdResolverLookup) {
@@ -18,19 +18,32 @@ public class ServiceAuthorizationContext {
 	}
 	
 	@Configurable
+	public void setOverrideRoles(Set<String> overrideRoles) {
+		this.overrideRoles = overrideRoles;
+	}
+
+	/** @deprecated Use {@link #setOverrideRoles(Set)}. */
+	@Deprecated
+	@Configurable
 	public void setBypassRoles(Set<String> bypassRoles) {
-		this.bypassRoles = bypassRoles;
+		setOverrideRoles(bypassRoles);
 	}
 	
 	public Function<String, CmdResolver> getMdResolverLookup() {
 		return mdResolverLookup;
 	}
 	
+	public Set<String> getOverrideRoles() {
+		return overrideRoles;
+	}
+
+	/** @deprecated Use {@link #getOverrideRoles()}. */
+	@Deprecated
 	public Set<String> getBypassRoles() {
-		return bypassRoles;
+		return getOverrideRoles();
 	}
 	
 	public ServiceDomainAuthorizationResolver getDomainResolver(String domainId) {
-		return new ServiceDomainAuthorizationResolver(mdResolverLookup.apply(domainId), bypassRoles);
+		return new ServiceDomainAuthorizationResolver(mdResolverLookup.apply(domainId), overrideRoles);
 	}
 }

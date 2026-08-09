@@ -3,6 +3,8 @@ roles:
   name: role1
 - &role2 
   name: role2
+- &admin
+  name: admin
 users:
 - id: user1
   name: user1
@@ -23,3 +25,8 @@ users:
 - id: guest
   name: guest
   password: test
+- id: admin
+  name: admin
+  password: test
+  roles:
+  - *admin

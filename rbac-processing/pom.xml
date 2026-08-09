@@ -43,6 +43,11 @@
             <version>${V.com.braintribe.gm}</version>
         </dependency>
         <dependency>
+            <groupId>com.braintribe.common</groupId>
+            <artifactId>common-attributes</artifactId>
+            <version>${V.com.braintribe.common}</version>
+        </dependency>
+        <dependency>
             <groupId>tribefire.extension.auth</groupId>
             <artifactId>rbac-api-model</artifactId>
             <version>${V.tribefire.extension.auth}</version>

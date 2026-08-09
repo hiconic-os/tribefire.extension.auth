@@ -1,2 +1,4 @@
 tribefire.extension.auth.rbac.annotation.AllowRoles,tribefire.extension.auth.rbac.model.meta.AllowRoles,value,roles
 tribefire.extension.auth.rbac.annotation.DenyRoles,tribefire.extension.auth.rbac.model.meta.DenyRoles,value,roles
+tribefire.extension.auth.rbac.annotation.OverrideRoles,tribefire.extension.auth.rbac.model.meta.OverrideRoles,value,roles
+tribefire.extension.auth.rbac.annotation.InduceRoles,tribefire.extension.auth.rbac.model.meta.InduceRoles,value,roles

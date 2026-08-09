@@ -46,6 +46,7 @@ public class ServiceAuthorizationReflectionProcessor extends AbstractDispatching
 			requestAuthorization.setOverrideRoles(authorization.overrideRoles());
 			requestAuthorization.getAllowRoles().addAll(authorization.allowRoles());
 			requestAuthorization.getDenyRoles().addAll(authorization.denyRoles());
+			requestAuthorization.getInducedRoles().addAll(resolver.resolveInducedRoles(authorization.type()));
 			authorizations.add(requestAuthorization);
 		}
 			

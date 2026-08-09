@@ -4,6 +4,8 @@ package tribefire.extension.auth.rbac.wire.space;
 import com.braintribe.model.deployment.DeploymentStatus;
 import com.braintribe.model.extensiondeployment.HardwiredServicePreProcessor;
 import com.braintribe.model.extensiondeployment.HardwiredServiceProcessor;
+import com.braintribe.model.extensiondeployment.HardwiredServiceAroundProcessor;
+import com.braintribe.model.extensiondeployment.meta.AroundProcessWith;
 import com.braintribe.model.extensiondeployment.meta.PreProcessWith;
 import com.braintribe.model.extensiondeployment.meta.ProcessWith;
 import com.braintribe.model.generic.reflection.Model;
@@ -23,6 +25,7 @@ import tribefire.extension.auth.rbac.model.api.ServiceAuthorizationReflectionReq
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationContext;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationPreProcessor;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationReflectionProcessor;
+import tribefire.extension.auth.rbac.processing.RoleInductionInterceptor;
 import tribefire.module.api.InitializerBindingBuilder;
 import tribefire.module.api.WireContractBindingBuilder;
 import tribefire.module.wire.contract.ModelApiContract;
@@ -34,6 +37,7 @@ import tribefire.module.wire.contract.WebPlatformHardwiredDeployablesContract;
 public class RbacModuleSpace implements TribefireModuleContract {
 
 	private static final String GLOBAL_ID_PREPROCESSOR_SERVICE_AUTH = "hardwired:preprocessor/service.auth";
+	private static final String GLOBAL_ID_AROUND_PROCESSOR_ROLE_INDUCTION = "hardwired:aroundProcessor/role.induction";
 	private static final String GLOBAL_ID_REFLECTION_PROCESSOR_SERVICE_AUTH = "hardwired:processor/service.auth";
 
 	@Import
@@ -63,6 +67,10 @@ public class RbacModuleSpace implements TribefireModuleContract {
 		hardwiredDeployables //
 		.bind(serviceAuthorizationPreProcessorDeployable()) //
 		.component(tfPlatform.binders().servicePreProcessor(), this::serviceAuthorizationPreProcessor);
+
+		hardwiredDeployables //
+		.bind(roleInductionInterceptorDeployable()) //
+		.component(tfPlatform.binders().serviceAroundProcessor(), this::roleInductionInterceptor);
 		
 		hardwiredDeployables //
 		.bind(serviceAuthorizationReflectionProcessorDeployable()) //
@@ -126,6 +134,24 @@ public class RbacModuleSpace implements TribefireModuleContract {
 		bean.setAuthorizationContext(serviceAuthorizationContext());
 		return bean;
 	}
+
+	@Managed
+	private RoleInductionInterceptor roleInductionInterceptor() {
+		RoleInductionInterceptor bean = new RoleInductionInterceptor();
+		bean.setAuthorizationContext(serviceAuthorizationContext());
+		return bean;
+	}
+
+	@Managed
+	private HardwiredServiceAroundProcessor roleInductionInterceptorDeployable() {
+		HardwiredServiceAroundProcessor bean = HardwiredServiceAroundProcessor.T.create();
+		bean.setName("Role Induction Interceptor");
+		bean.setExternalId("aroundProcessor.role.induction");
+		bean.setGlobalId(GLOBAL_ID_AROUND_PROCESSOR_ROLE_INDUCTION);
+		bean.setAutoDeploy(true);
+		bean.setDeploymentStatus(DeploymentStatus.deployed);
+		return bean;
+	}
 	
 	@Managed
 	private ServiceAuthorizationContext serviceAuthorizationContext() {
@@ -133,7 +159,7 @@ public class RbacModuleSpace implements TribefireModuleContract {
 		
 		ModelAccessoryFactory modelAccessoryFactory = tfPlatform.requestUserRelated().modelAccessoryFactory();
 		bean.setMdResolverLookup(domainId -> modelAccessoryFactory.getForServiceDomain(domainId).getCmdResolver());
-		bean.setBypassRoles(Collections.set("tf-internal"));
+		bean.setOverrideRoles(Collections.set("tf-internal"));
 		return bean;
 	}
 
@@ -150,6 +176,12 @@ public class RbacModuleSpace implements TribefireModuleContract {
 		preProcessWith.setProcessor(preProcessor);
 		
 		editor.onEntityType(AuthorizedRequest.T).addMetaData(preProcessWith);
+
+		HardwiredServiceAroundProcessor roleInductionInterceptor = session.findEntityByGlobalId(GLOBAL_ID_AROUND_PROCESSOR_ROLE_INDUCTION);
+		AroundProcessWith aroundProcessWith = session.create(AroundProcessWith.T);
+		aroundProcessWith.setGlobalId("aroundProcessWith.role.induction");
+		aroundProcessWith.setProcessor(roleInductionInterceptor);
+		editor.onEntityType(AuthorizedRequest.T).addMetaData(aroundProcessWith);
 		
 		HardwiredServiceProcessor serviceProcessor = session.findEntityByGlobalId(GLOBAL_ID_REFLECTION_PROCESSOR_SERVICE_AUTH);
 		

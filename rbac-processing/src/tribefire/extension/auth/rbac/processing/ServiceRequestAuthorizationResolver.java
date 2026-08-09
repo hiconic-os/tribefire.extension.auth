@@ -13,6 +13,8 @@ import com.braintribe.model.service.api.AuthorizedRequest;
 import tribefire.extension.auth.rbac.model.meta.AccessControl;
 import tribefire.extension.auth.rbac.model.meta.AllowRoles;
 import tribefire.extension.auth.rbac.model.meta.DenyRoles;
+import tribefire.extension.auth.rbac.model.meta.InduceRoles;
+import tribefire.extension.auth.rbac.model.meta.OverrideRoles;
 
 public class ServiceRequestAuthorizationResolver {
 	private Set<String> overrideRoles;
@@ -49,20 +51,40 @@ public class ServiceRequestAuthorizationResolver {
 	}
 	
 	public ServiceAuthorization resolve(EntityMdResolver entityMdResolver) {
+		RoleAggregator mdOverrideRoles = new RoleAggregator();
 		RoleAggregator allowRoles = new RoleAggregator();
 		RoleAggregator denyRoles = new RoleAggregator();
 		
 		List<AccessControl> accessControls = entityMdResolver.meta(AccessControl.T).list();
 		
 		for (AccessControl accessControl: accessControls) {
-			switch (accessControl) {
+				switch (accessControl) {
 				case AllowRoles ar -> allowRoles.add(ar);
 				case DenyRoles dr -> denyRoles.add(dr);
+				case OverrideRoles or -> mdOverrideRoles.add(or);
 				default -> {}
 			}
 		}
-		
-		return new ServiceAuthorization(entityMdResolver.getGmEntityType(), overrideRoles, allowRoles.getRoles(), denyRoles.getRoles());
+
+		Set<String> effectiveOverrideRoles = union(overrideRoles, mdOverrideRoles.getRoles());
+		return new ServiceAuthorization(entityMdResolver.getGmEntityType(), effectiveOverrideRoles, allowRoles.getRoles(), denyRoles.getRoles());
+	}
+
+	public Set<String> resolveInducedRoles(EntityMdResolver entityMdResolver) {
+		Set<String> roles = Collections.emptySet();
+		for (InduceRoles metadata : entityMdResolver.meta(InduceRoles.T).list())
+			roles = union(roles, metadata.getRoles());
+		return roles;
+	}
+
+	private static Set<String> union(Set<String> first, Set<String> second) {
+		if (first.isEmpty())
+			return second;
+		if (second.isEmpty())
+			return first;
+		Set<String> result = new HashSet<>(first);
+		result.addAll(second);
+		return result;
 	}
 	
 

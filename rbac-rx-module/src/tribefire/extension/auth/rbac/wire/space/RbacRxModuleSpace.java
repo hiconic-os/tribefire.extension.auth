@@ -15,6 +15,7 @@ import tribefire.extension.auth.rbac.model.api.ServiceAuthorizationReflectionReq
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationContext;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationPreProcessor;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationReflectionProcessor;
+import tribefire.extension.auth.rbac.processing.RoleInductionInterceptor;
 
 @Managed
 public class RbacRxModuleSpace implements RxModuleContract {
@@ -26,7 +27,15 @@ public class RbacRxModuleSpace implements RxModuleContract {
 	public void configureModels(ModelConfigurations configurations) {
 		ModelConfiguration configuration = configurations.byName(_RbacConfiguredApiModel_.name);
 		configuration.bindInterceptor("service-auth").forType(AuthorizedRequest.T).bind(this::serviceAuthorizationPreProcessor);
+		configuration.bindInterceptor("role-induction").forType(AuthorizedRequest.T).bind(this::roleInductionInterceptor);
 		configuration.bindRequest(ServiceAuthorizationReflectionRequest.T, this::serviceAuthorizationReflectionProcessor);
+	}
+
+	@Managed
+	private RoleInductionInterceptor roleInductionInterceptor() {
+		RoleInductionInterceptor bean = new RoleInductionInterceptor();
+		bean.setAuthorizationContext(serviceAuthorizationContext());
+		return bean;
 	}
 	
 	@Managed
@@ -49,7 +58,7 @@ public class RbacRxModuleSpace implements RxModuleContract {
 		ServiceDomains serviceDomains = platform.serviceDomains();
 		
 		bean.setMdResolverLookup(domainId -> serviceDomains.byId(domainId).contextCmdResolver());
-		bean.setBypassRoles(Collections.set("internal"));
+		bean.setOverrideRoles(Collections.set("internal"));
 		return bean;
 	}
 
