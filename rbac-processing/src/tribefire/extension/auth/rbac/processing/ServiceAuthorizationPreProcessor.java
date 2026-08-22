@@ -20,7 +20,7 @@ public class ServiceAuthorizationPreProcessor implements ReasonedServicePreProce
 	private static final Logger logger = Logger.getLogger(ServiceAuthorizationPreProcessor.class);
 	private ServiceAuthorizationContext authorizationContext;
 	private Function<String, CmdResolver> mdResolverLookup;
-	private Set<String> bypassRoles = Collections.emptySet();
+	private final Set<String> bypassRoles = Collections.emptySet();
 	
 	@Required
 	public void setAuthorizationContext(ServiceAuthorizationContext authorizationContext) {
@@ -47,8 +47,8 @@ public class ServiceAuthorizationPreProcessor implements ReasonedServicePreProce
 	}
 	
 	private class StatefulServiceAuthorization {
-		private ServiceRequestContext context;
-		private AuthorizedRequest request;
+		private final ServiceRequestContext context;
+		private final AuthorizedRequest request;
 		private UserSession userSession;
 		
 		public StatefulServiceAuthorization(ServiceRequestContext context, AuthorizedRequest request) {
@@ -76,8 +76,9 @@ public class ServiceAuthorizationPreProcessor implements ReasonedServicePreProce
 			String domainId = context.getDomainId();
 			ServiceDomainAuthorizationResolver resolver = authorizationContext.getDomainResolver(domainId);
 			ServiceAuthorization authorization =  resolver.resolve(request.entityType());
+			Set<String> effectiveRoles = getEffectiveRoles();
 			
-			ServiceAccess determineAccess = authorization.determineAccess(getEffectiveRoles());
+			ServiceAccess determineAccess = authorization.determineAccess(effectiveRoles);
 			String requestInfo = "user: " + getUserId() + ", request: " + request.entityType().getTypeSignature() + ", domain: " + domainId;
 			
 			switch (determineAccess) {
