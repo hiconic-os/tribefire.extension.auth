@@ -22,13 +22,16 @@ public class RbacRxOpenapiDescriptionResolver implements OpenapiDescriptionResol
 	@Override
 	public void resolveEntityDescription(ModelMdResolver modelMdResolver, EntityMdResolver entityMdResolver, Consumer<String> consumer) {
 		ServiceAuthorization authorization = authorizationResolver.resolve(entityMdResolver);
-		if (!authorization.isPriviledged())
+		Set<String> inducedRoles = authorizationResolver.resolveInducedRoles(entityMdResolver);
+		if (!authorization.isPriviledged() && authorization.overrideRoles().isEmpty() && inducedRoles.isEmpty())
 			return;
 
 		consumer.accept("\n\n***");
 		consumer.accept("\n\n<b>`Authorization`</b>");
 		appendAccessInfo("Allowed Roles", authorization.allowRoles(), consumer);
 		appendAccessInfo("Denied Roles", authorization.denyRoles(), consumer);
+		appendAccessInfo("Override Roles", authorization.overrideRoles(), consumer);
+		appendAccessInfo("Induced Roles", inducedRoles, consumer);
 	}
 
 	private void appendAccessInfo(String context, Set<String> roles, Consumer<String> consumer) {
