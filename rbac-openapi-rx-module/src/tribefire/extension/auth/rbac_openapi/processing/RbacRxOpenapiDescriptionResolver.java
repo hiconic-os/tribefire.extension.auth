@@ -7,9 +7,9 @@ import com.braintribe.cfg.Required;
 import com.braintribe.model.processing.meta.cmd.builders.EntityMdResolver;
 import com.braintribe.model.processing.meta.cmd.builders.ModelMdResolver;
 
+import hiconic.rx.openapi.v3.api.OpenapiDescriptionResolver;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorization;
 import tribefire.extension.auth.rbac.processing.ServiceRequestAuthorizationResolver;
-import tribefire.extension.webapi.openapi_v3.api.OpenapiDescriptionResolver;
 
 public class RbacRxOpenapiDescriptionResolver implements OpenapiDescriptionResolver {
 	private ServiceRequestAuthorizationResolver authorizationResolver;
