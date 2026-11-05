@@ -1,5 +1,6 @@
 package tribefire.extension.auth.rbac.wire.space;
 
+import com.braintribe.gm._SecurityReasonModel_;
 import com.braintribe.model.service.api.AuthorizedRequest;
 import com.braintribe.wire.api.annotation.Import;
 import com.braintribe.wire.api.annotation.Managed;
@@ -10,7 +11,8 @@ import hiconic.rx.module.api.service.ServiceDomains;
 import hiconic.rx.module.api.wire.RxModuleContract;
 import hiconic.rx.module.api.wire.RxPlatformContract;
 import jsinterop.utils.Collections;
-import tribefire.extension.auth._RbacConfiguredApiModel_;
+import tribefire.extension.auth._RbacApiModel_;
+import tribefire.extension.auth.rbac.rx.api.RbacModelSymbols;
 import tribefire.extension.auth.rbac.model.api.ServiceAuthorizationReflectionRequest;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationContext;
 import tribefire.extension.auth.rbac.processing.ServiceAuthorizationPreProcessor;
@@ -25,7 +27,8 @@ public class RbacRxModuleSpace implements RxModuleContract {
 	
 	@Override
 	public void configureModels(ModelConfigurations configurations) {
-		ModelConfiguration configuration = configurations.byName(_RbacConfiguredApiModel_.name);
+		ModelConfiguration configuration = configurations.extendedModel(RbacModelSymbols.configuredRbacApiModel, _RbacApiModel_.reflection);
+		configuration.addModel(_SecurityReasonModel_.reflection);
 		configuration.bindInterceptor("service-auth").forType(AuthorizedRequest.T).bind(this::serviceAuthorizationPreProcessor);
 		configuration.bindInterceptor("role-induction").forType(AuthorizedRequest.T).bind(this::roleInductionInterceptor);
 		configuration.bindRequest(ServiceAuthorizationReflectionRequest.T, this::serviceAuthorizationReflectionProcessor);

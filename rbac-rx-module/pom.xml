@@ -29,8 +29,13 @@
         </dependency>
         <dependency>
             <groupId>tribefire.extension.auth</groupId>
-            <artifactId>rbac-configured-api-model</artifactId>
+            <artifactId>rbac-rx-module-api</artifactId>
             <version>${V.tribefire.extension.auth}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.braintribe.gm</groupId>
+            <artifactId>security-reason-model</artifactId>
+            <version>${V.com.braintribe.gm}</version>
             <?tag asset ?>
         </dependency>
     </dependencies>

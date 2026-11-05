@@ -12,7 +12,7 @@ import com.braintribe.wire.api.annotation.Managed;
 import hiconic.rx.module.api.service.ServiceDomainConfiguration;
 import hiconic.rx.module.api.wire.RxModuleContract;
 import hiconic.rx.module.api.wire.RxPlatformContract;
-import tribefire.extension.auth._RbacConfiguredApiModel_;
+import tribefire.extension.auth.rbac.rx.api.RbacModelSymbols;
 import tribefire.extension.auth.test.model.TestRequest;
 import tribefire.extension.auth.test.model.ProcessWithInducedRole;
 import tribefire.extension.auth.test.model.ProcessWithRole2;
@@ -28,7 +28,7 @@ public class RbacRxModuleTestSpace implements RxModuleContract {
 
 	@Override
 	public void configureMainServiceDomain(ServiceDomainConfiguration configuration) {
-		configuration.addModel(platform.configuredModels().byName(_RbacConfiguredApiModel_.name));
+		configuration.addModel(RbacModelSymbols.configuredRbacApiModel);
 		configuration.bindRequest(TestRequest.T, () -> (context, request) -> {
 			if (request instanceof ProcessWithInducedRole)
 				return ProcessWithRole2.T.create().eval(context).get();

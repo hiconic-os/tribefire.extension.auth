@@ -18,6 +18,10 @@ import java.util.function.Supplier;
 import org.assertj.core.api.Assertions;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import tribefire.extension.auth.rbac.rx.api.RbacModelSymbols;
+import tribefire.extension.auth._RbacApiModel_;
+import com.braintribe.model.generic.GMF;
+import com.braintribe.model.meta.GmMetaModel;
 
 import com.braintribe.gm.model.reason.Maybe;
 import com.braintribe.gm.model.security.reason.Forbidden;
@@ -46,6 +50,18 @@ public class RbacTest extends AbstractRxTest {
 
 	@BeforeClass
 	public static void onBeforeClass() {
+	}
+
+	/** Repeated platform boots must keep runtime overrides out of the shared reflection schema. */
+	@Test
+	public void keepsRuntimeMetadataInPlatformOwnedOverrides() {
+		GmMetaModel configured = platformContract.configuration().configuredModels().byReference(RbacModelSymbols.configuredRbacApiModel)
+				.modelOracle().getGmMetaModel();
+		GmMetaModel skeleton = GMF.getTypeReflection().getModel(_RbacApiModel_.name).getMetaModel();
+		Assertions.assertThat(configured).isNotSameAs(skeleton);
+		Assertions.assertThat(configured.getTypes()).isEmpty();
+		Assertions.assertThat(configured.getTypeOverrides()).isNotEmpty();
+		Assertions.assertThat(skeleton.getTypeOverrides()).isEmpty();
 	}
 
 	@Test

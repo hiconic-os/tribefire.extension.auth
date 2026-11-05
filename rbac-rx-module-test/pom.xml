@@ -51,9 +51,8 @@ limitations under the License.
         </dependency>
         <dependency>
             <groupId>tribefire.extension.auth</groupId>
-            <artifactId>rbac-configured-api-model</artifactId>
+            <artifactId>rbac-rx-module-api</artifactId>
             <version>${V.tribefire.extension.auth}</version>
-            <?tag asset ?>
         </dependency>
         <dependency>
             <groupId>hiconic.platform.reflex</groupId>
