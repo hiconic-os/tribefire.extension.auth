@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent><groupId>tribefire.extension.auth</groupId><artifactId>parent</artifactId><version>[1.0,1.1)</version></parent>
     <artifactId>rbac-rx-module-api</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <dependencies>
         <dependency>
             <groupId>hiconic.platform.reflex</groupId>
